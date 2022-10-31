@@ -131,8 +131,8 @@ func updateProductsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	params := mux.Vars(r)
-	id, _ := strconv.Atoi(params["id"])
+	vars := mux.Vars(r)
+	id, _ := strconv.Atoi(vars["id"])
 	price, _ := strconv.Atoi(r.FormValue("price"))
 	if r.FormValue("price") == "" || r.FormValue("description") == "" || r.FormValue("name") == "" {
 		w.WriteHeader(http.StatusBadRequest)
@@ -183,8 +183,8 @@ func deleteProductHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	params := mux.Vars(r)
-	id, _ := strconv.Atoi(params["id"])
+	vars := mux.Vars(r)
+	id, _ := strconv.Atoi(vars["id"])
 
 	var products []Product
 	err = json.Unmarshal(data, &products)
