@@ -38,9 +38,13 @@ func getProductsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func getProductsIDHandler(w http.ResponseWriter, r *http.Request) {
+func getProductsIdHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	ID, _ := strconv.Atoi(vars["id"])
+	ID, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 
 	for _, product := range products {
 		if product.ID == ID {
@@ -73,7 +77,10 @@ func createProductsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	id, _ := strconv.Atoi(r.FormValue("id"))
+	id, err := strconv.Atoi(r.FormValue("id"))
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+	}
 	price, _ := strconv.Atoi(r.FormValue("price"))
 	if r.FormValue("price") == "" || r.FormValue("description") == "" || r.FormValue("name") == "" || r.FormValue("id") == "" {
 		w.WriteHeader(http.StatusBadRequest)
@@ -96,7 +103,7 @@ func createProductsHandler(w http.ResponseWriter, r *http.Request) {
 
 	products = append(products, newProduct)
 
-	productsByte, _ := json.MarshalIndent(products, "", " ")
+	productsByte, _ := json.Marshal(products)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -132,8 +139,14 @@ func updateProductsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	vars := mux.Vars(r)
-	id, _ := strconv.Atoi(vars["id"])
-	price, _ := strconv.Atoi(r.FormValue("price"))
+	id, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+	}
+	price, err := strconv.Atoi(r.FormValue("price"))
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+	}
 	if r.FormValue("price") == "" || r.FormValue("description") == "" || r.FormValue("name") == "" {
 		w.WriteHeader(http.StatusBadRequest)
 		return
@@ -150,7 +163,7 @@ func updateProductsHandler(w http.ResponseWriter, r *http.Request) {
 		if product.ID == id {
 			products[i] = newProduct
 
-			productsByte, _ := json.MarshalIndent(products, "", " ")
+			productsByte, _ := json.Marshal(products)
 			if err != nil {
 				w.WriteHeader(http.StatusInternalServerError)
 				return
@@ -184,7 +197,10 @@ func deleteProductHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	vars := mux.Vars(r)
-	id, _ := strconv.Atoi(vars["id"])
+	id, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+	}
 
 	var products []Product
 	err = json.Unmarshal(data, &products)
@@ -193,7 +209,7 @@ func deleteProductHandler(w http.ResponseWriter, r *http.Request) {
 		if product.ID == id {
 			products = append(products[:i], products[i+1:]...)
 
-			productsByte, _ := json.MarshalIndent(products, "", " ")
+			productsByte, _ := json.Marshal(products)
 			if err != nil {
 				w.WriteHeader(http.StatusInternalServerError)
 				return
@@ -223,7 +239,7 @@ func main() {
 	initProducts()
 	r := mux.NewRouter()
 	r.HandleFunc("/products", getProductsHandler).Methods("GET")
-	r.HandleFunc("/products/{id}", getProductsIDHandler).Methods("GET")
+	r.HandleFunc("/products/{id}", getProductsIdHandler).Methods("GET")
 	r.HandleFunc("/products", createProductsHandler)
 	r.HandleFunc("/products/{id}", updateProductsHandler).Methods("PUT")
 	r.HandleFunc("products/{id}", deleteProductHandler).Methods("DELETE")
