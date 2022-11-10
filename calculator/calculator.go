@@ -12,17 +12,17 @@ func Multiply(a, b int) int {
 	return a * b
 }
 
-type ErrDivideByZero string
+type ErrDivideByZero struct{}
 
-func (err ErrDivideByZero) Error() string {
-	return string(err)
+func (ErrDivideByZero) Error() string {
+	return "divide by zero"
 }
 
 func Divide(a, b int) (int, error) {
 	zero := b == 0
 
 	if zero {
-		return 0, ErrDivideByZero("divide by zero")
+		return 0, ErrDivideByZero{}
 	}
 	return a / b, nil
 }
