@@ -1,7 +1,5 @@
 package calculator
 
-import "log"
-
 func Add(a, b int) int {
 	return a + b
 }
@@ -14,18 +12,17 @@ func Multiply(a, b int) int {
 	return a * b
 }
 
-type DivideError string
+type ErrDivideByZero string
 
-func (err DivideError) Error() string {
+func (err ErrDivideByZero) Error() string {
 	return string(err)
 }
 
 func Divide(a, b int) (int, error) {
-	err := b == 0
+	zero := b == 0
 
-	if err {
-		log.Printf("Error dividing by zero, %v", err)
-
+	if zero {
+		return 0, ErrDivideByZero("divide by zero")
 	}
 	return a / b, nil
 }
