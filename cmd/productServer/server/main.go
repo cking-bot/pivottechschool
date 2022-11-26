@@ -103,7 +103,7 @@ func createProductsHandler(w http.ResponseWriter, r *http.Request) {
 
 	products = append(products, newProduct)
 
-	productsByte, _ := json.Marshal(products)
+	productsByte, err := json.Marshal(products)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
