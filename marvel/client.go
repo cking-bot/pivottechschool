@@ -11,7 +11,6 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/joho/godotenv"
 )
 
@@ -65,15 +64,12 @@ func (c *marvelClient) signURL(url string) string {
 func (c *marvelClient) getCharacters() ([]Characters, error) {
 	url := c.baseURL + "/events?limit=25"
 	url = c.signURL(url)
-	spew.Dump(url)
 
 	res, err := c.httpClient.Get(url)
 	if err != nil {
 		return nil, err
 	}
 	defer res.Body.Close()
-
-	spew.Dump(res.Status, res.StatusCode)
 
 	var characterResponse CharactersResponse
 	if err := json.NewDecoder(res.Body).Decode(&characterResponse); err != nil {
