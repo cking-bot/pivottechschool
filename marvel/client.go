@@ -39,7 +39,10 @@ type marvelClient struct {
 func NewClient(url string) marvelClient {
 
 	return marvelClient{
-		url, pubkey, privkey, httpClient,
+		url,
+		pubkey,
+		privkey,
+		httpClient,
 	}
 }
 
@@ -55,7 +58,7 @@ func (c *marvelClient) signURL(url string) string {
 	return fmt.Sprintf("%s&ts=%d&apikey=%s&hash=%s", url, ts, c.pubkey, hash)
 }
 
-func (c *marvelClient) GetCharacters() ([]Characters, error) {
+func (c *marvelClient) GetCharacters() ([]Character, error) {
 	url := c.baseURL + "/characters?limit=25"
 	url = c.signURL((url))
 

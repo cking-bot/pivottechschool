@@ -1,6 +1,6 @@
 package marvel
 
-type Characters struct {
+type Character struct {
 	ID          int    `json:"id"`
 	Name        string `json:"name"`
 	Description string `json:"description"`
@@ -14,10 +14,10 @@ type CharactersResponse struct {
 	AttributionHTML string `json:"attributionHTML"`
 	Etag            string `json:"etag"`
 	Data            struct {
-		Offset  int          `json:"offset"`
-		Limit   int          `json:"limit"`
-		Total   int          `json:"total"`
-		Count   int          `json:"count"`
-		Results []Characters `json:"results"`
+		Offset  int         `json:"offset"`
+		Limit   int         `json:"limit"`
+		Total   int         `json:"total"`
+		Count   int         `json:"count"`
+		Results []Character `json:"results"`
 	} `json:"data"`
 }
