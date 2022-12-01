@@ -1,5 +1,7 @@
 package calculator
 
+import "math"
+
 func Add(a, b int) int {
 	return a + b
 }
@@ -10,6 +12,10 @@ func Subtract(a, b int) int {
 
 func Multiply(a, b int) int {
 	return a * b
+}
+
+func Pow(a, b float64) float64 {
+	return math.Pow(a, b)
 }
 
 type ErrDivideByZero struct{}

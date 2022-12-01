@@ -51,7 +51,7 @@ func TestSubtract(t *testing.T) {
 	}
 }
 
-func TestMulitply(t *testing.T) {
+func TestMultiply(t *testing.T) {
 	tests := []struct {
 		name string
 		a    int
@@ -69,6 +69,27 @@ func TestMulitply(t *testing.T) {
 			if got != test.want {
 				t.Errorf("got %q, want %q", got, test.want)
 			}
+		})
+	}
+}
+
+func TestPow(t *testing.T) {
+	tests := []struct {
+		name string
+		a    float64
+		b    float64
+		want float64
+	}{
+		{name: "test one", a: 2, b: 3, want: 8},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			got := calculator.Pow(test.a, test.b)
+			if got != test.want {
+				t.Errorf("got %g, want %g", got, test.want)
+			}
+
 		})
 	}
 }
@@ -98,4 +119,5 @@ func TestDivide(t *testing.T) {
 			}
 		})
 	}
+
 }
